@@ -3,7 +3,7 @@ using System;
 
 namespace Study
 {
-    public class Program
+    public class Path
     {
         static void Main01(string[] args)
         {
