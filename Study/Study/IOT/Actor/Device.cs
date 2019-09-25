@@ -29,6 +29,12 @@ namespace Study.IOT.Actor
         {
             switch (message)
             {
+                case RequestTrackDevice req when req.GroupId.Equals(GroupId) && req.DeviceId.Equals(DeviceId):
+                    Sender.Tell(DeviceRegistered.Instance);
+                    break;
+                case RequestTrackDevice req:
+                    Log.Warning($"Ignoring TrackDevice request for {req.GroupId}-{req.DeviceId}.This actor is responsible for {GroupId}-{DeviceId}.");
+                    break;
                 case ReadTemperature read:
                     Sender.Tell(new RespondTemperature(read.RequestId, _lastTemperatureReading));
                     break;

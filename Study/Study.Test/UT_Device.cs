@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Study.Test
 {
-    public class UnitTest1
+    public class UT_Device
     {
         [Fact]
         public void Device_actor_must_reply_with_empty_reading_if_no_temperature_is_known()
@@ -48,6 +48,29 @@ namespace Study.Test
             response2.Value.Should().Be(55.0);
         }
 
+        [Fact]
+        public void Device_actor_must_reply_to_registration_requests()
+        {
+            var sys = ActorSystem.Create("mysys");
+            var probe = new TestKit().CreateTestProbe();
+            var deviceActor = sys.ActorOf(Device.Props("group", "device"));
+            deviceActor.Tell(new RequestTrackDevice("group", "device"),probe.Ref);
+            probe.ExpectMsg<DeviceRegistered>();
+            probe.LastSender.Should().Be(deviceActor);
+        }
 
+        [Fact]
+        public void Device_actor_must_ignore_wrong_registration_requests()
+        {
+            var sys = ActorSystem.Create("mysys");
+            var probe = new TestKit().CreateTestProbe();
+            var deviceActor = sys.ActorOf(Device.Props("group", "device"));
+
+            deviceActor.Tell(new RequestTrackDevice("wrongGroup", "device"), probe.Ref);
+            probe.ExpectNoMsg(TimeSpan.FromMilliseconds(500));
+
+            deviceActor.Tell(new RequestTrackDevice("group", "Wrongdevice"), probe.Ref);
+            probe.ExpectNoMsg(TimeSpan.FromMilliseconds(500));
+        }
     }
 }
