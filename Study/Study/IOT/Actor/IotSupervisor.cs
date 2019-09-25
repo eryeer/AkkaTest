@@ -1,10 +1,7 @@
 ﻿using Akka.Actor;
 using Akka.Event;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Study.IOT
+namespace Study.IOT.Actor
 {
     public class IotSupervisor : UntypedActor
     {
