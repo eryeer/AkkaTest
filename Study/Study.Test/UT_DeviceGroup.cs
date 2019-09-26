@@ -63,5 +63,57 @@ namespace Study.Test
 
             deviceActor1.Should().Be(deviceActor2);
         }
+
+        [Fact]
+        public void DeviceGroup_actor_must_be_able_to_list_active_devices()
+        {
+            var sys = ActorSystem.Create("mysys");
+            var probe = new TestKit().CreateTestProbe();
+            var groupActor = sys.ActorOf(DeviceGroup.Props("group"));
+
+            groupActor.Tell(new RequestTrackDevice("group","device1"),probe.Ref);
+            probe.ExpectMsg<DeviceRegistered>();
+            var device1 = probe.LastSender;
+
+            groupActor.Tell(new RequestTrackDevice("group", "device2"), probe.Ref);
+            probe.ExpectMsg<DeviceRegistered>();
+            var device2 = probe.LastSender;
+
+            groupActor.Tell(new RequestDeviceList(requestId:0), probe.Ref);
+            probe.ExpectMsg<ReplyDeviceList>(rep=>rep.RequestId == 0 
+            && rep.Ids.Contains("device1")&& rep.Ids.Contains("device2"));
+        }
+
+        [Fact]
+        public void DeviceGroup_actor_must_be_able_to_list_active_devices_after_one_shuts_down()
+        {
+            var sys = ActorSystem.Create("mysys");
+            var probe = new TestKit().CreateTestProbe();
+            var groupActor = sys.ActorOf(DeviceGroup.Props("group"));
+            groupActor.Tell(new RequestTrackDevice("group", "device1"), probe.Ref);
+            probe.ExpectMsg<DeviceRegistered>();
+            var toShutDown = probe.LastSender;
+
+            groupActor.Tell(new RequestTrackDevice("group", "device2"), probe.Ref);
+            probe.ExpectMsg<DeviceRegistered>();
+
+            groupActor.Tell(new RequestDeviceList(requestId: 0), probe.Ref);
+            probe.ExpectMsg<ReplyDeviceList>(s => s.RequestId == 0
+                                                  && s.Ids.Contains("device1")
+                                                  && s.Ids.Contains("device2"));
+
+            probe.Watch(toShutDown);
+            toShutDown.Tell(PoisonPill.Instance);
+            probe.ExpectTerminated(toShutDown);
+
+            // using awaitAssert to retry because it might take longer for the groupActor
+            // to see the Terminated, that order is undefined
+            probe.AwaitAssert(() =>
+            {
+                groupActor.Tell(new RequestDeviceList(requestId: 1), probe.Ref);
+                probe.ExpectMsg<ReplyDeviceList>(s => s.RequestId == 1 && s.Ids.Contains("device2")
+                && !s.Ids.Contains("device1"));
+            });
+        }
     }
 }
