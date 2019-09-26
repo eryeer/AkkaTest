@@ -23,6 +23,9 @@ namespace Study.IOT.Actor
         {
             switch (message)
             {
+                case RequestAllTemperatures r:
+                    Context.ActorOf(DeviceGroupQuery.Props(ActorToDeviceId, r.RequestId, Sender, TimeSpan.FromSeconds(3)));
+                    break;
                 case RequestTrackDevice trackMsg when trackMsg.GroupId.Equals(GroupId):
                     if (deviceIdToActor.TryGetValue(trackMsg.DeviceId, out var actorRef))
                     {
@@ -73,5 +76,33 @@ namespace Study.IOT.Actor
             RequestId = requestId;
             Ids = ids;
         }
+    }
+
+    public sealed class Temperature : ITemperatureReading
+    {
+        public Temperature(double value)
+        {
+            Value = value;
+        }
+
+        public double Value { get; }
+    }
+
+    public sealed class TemperatureNotAvailable : ITemperatureReading
+    {
+        public static TemperatureNotAvailable Instance { get; } = new TemperatureNotAvailable();
+        private TemperatureNotAvailable() { }
+    }
+
+    public sealed class DeviceNotAvailable : ITemperatureReading
+    {
+        public static DeviceNotAvailable Instance { get; } = new DeviceNotAvailable();
+        private DeviceNotAvailable() { }
+    }
+
+    public sealed class DeviceTimedOut : ITemperatureReading
+    {
+        public static DeviceTimedOut Instance { get; } = new DeviceTimedOut();
+        private DeviceTimedOut() { }
     }
 }
