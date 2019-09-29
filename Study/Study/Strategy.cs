@@ -7,7 +7,7 @@ namespace Study
 {
     public class Strategy
     {
-        static void Main(string[] args)
+        static void Main01(string[] args)
         {
             var sys = ActorSystem.Create("MySystem");
             var firstRef = sys.ActorOf(Props.Create<SupervisingActor>(), "supervising-actor");

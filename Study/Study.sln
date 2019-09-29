@@ -5,7 +5,11 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Study", "Study\Study.csproj", "{51CD3E1A-E67C-479A-9BB6-64A1427F03A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Study.Test", "Study.Test\Study.Test.csproj", "{8FC8877F-E711-4169-B77A-0AF943E84E86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Study.Test", "Study.Test\Study.Test.csproj", "{8FC8877F-E711-4169-B77A-0AF943E84E86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaClient", "AkkaClient\AkkaClient.csproj", "{9994F206-F50E-4A87-8EEC-629576B2A3EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaServer", "AkkaServer\AkkaServer.csproj", "{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{8FC8877F-E711-4169-B77A-0AF943E84E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FC8877F-E711-4169-B77A-0AF943E84E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FC8877F-E711-4169-B77A-0AF943E84E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9994F206-F50E-4A87-8EEC-629576B2A3EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9994F206-F50E-4A87-8EEC-629576B2A3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9994F206-F50E-4A87-8EEC-629576B2A3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9994F206-F50E-4A87-8EEC-629576B2A3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
