@@ -8,7 +8,7 @@ namespace Study.IOT
 {
     public class IotApp
     {
-        static void Main(string[] args)
+        static void Main01(string[] args)
         {
             Init();
         }
