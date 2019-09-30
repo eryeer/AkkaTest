@@ -4,6 +4,7 @@ using Akka.IO;
 using System;
 using System.Net;
 using System.Text;
+using System.Threading;
 
 namespace AkkaServer
 {
@@ -12,9 +13,10 @@ namespace AkkaServer
         static void Main(string[] args)
         {
             var sys = ActorSystem.Create("ServerSystem");
-            //var manager = sys.Tcp();
-            var server = sys.ActorOf(TcpServer.Props(8089), "tcp-server");
-            
+            var server1 = sys.ActorOf(TcpServer.Props(8088), "tcp-server1");
+            var server2 = sys.ActorOf(TcpServer.Props(8089), "tcp-server2");
+            var server3 = sys.ActorOf(TcpServer.Props(8090), "tcp-server3");
+            var server4 = sys.ActorOf(TcpServer.Props(8091), "tcp-server4");
             Console.ReadLine();
         }
     }
@@ -53,11 +55,12 @@ namespace AkkaServer
         private long receivedCount = 0;
         protected ILoggingAdapter Log { get; } = Context.GetLogger();
         private readonly IActorRef _connection;
+        private ICancelable scheduler;
 
         public EchoConnection(IActorRef connection)
         {
             _connection = connection;
-            Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(1000, 1000, Self, new TPSTimer(), Self);
+            scheduler = Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(1000, 1000, Self, new TPSTimer(), Self);
         }
 
         protected override void OnReceive(object message)
@@ -70,15 +73,22 @@ namespace AkkaServer
                     else
                     {
                         receivedCount++;
-                        Log.Info($"{receivedCount} Data received");
-                        Log.Info("msg size is {0}", received.Data.Count);
-                        var arr = received.Data.ToArray().ToHexString();
-                        Log.Info("msg content: {0}", arr);
+                        //Log.Info($"{receivedCount} Data received");
+                        //for (int i = 0; i <= 100000; i++)
+                        //{ }
+                        //Log.Info("msg size is {0}", received.Data.Count);
+                        //var arr = received.Data.ToArray().ToHexString();
+                        //Log.Info("msg content: {0}", arr);
                     }
                     break;
                 case TPSTimer _:
                     Log.Info("Tps is {0}/s", receivedCount);
                     receivedCount = 0;
+                    break;
+                case Tcp.ConnectionClosed _:
+                    Log.Warning("Connection Closed");
+                    scheduler.CancelIfNotNull();
+                    Context.Stop(Self);
                     break;
                 default:
                     Unhandled(message);

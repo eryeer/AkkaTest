@@ -4,7 +4,6 @@ using Akka.IO;
 using System;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AkkaClient
 {
@@ -14,7 +13,10 @@ namespace AkkaClient
         {
             var sys = ActorSystem.Create("ClientSystem");
             //var manager = sys.Tcp();
-            var client = sys.ActorOf(TcpClient.Props("127.0.0.1", 8089), "tcp-client");
+            var client1 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8088), "tcp-client1");
+            var client2 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8089), "tcp-client2");
+            var client3 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8090), "tcp-client3");
+            var client4 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8091), "tcp-client4");
             string msg = "";
             while (true)
             {
@@ -28,12 +30,18 @@ namespace AkkaClient
                 else if (msg.Equals("start"))
                 {
                     Console.WriteLine("start tps test");
-                    client.Tell("start_tps");
+                    client1.Tell("start_tps");
+                    client2.Tell("start_tps");
+                    client3.Tell("start_tps");
+                    client4.Tell("start_tps");
                 }
                 else
                 {
                     Console.WriteLine("send a normal msg");
-                    client.Tell(msg);
+                    client1.Tell(msg);
+                    client2.Tell(msg);
+                    client3.Tell(msg);
+                    client4.Tell(msg);
                 }
             }
         }
@@ -53,11 +61,19 @@ namespace AkkaClient
 
         private byte[] msg_512;
 
+        private byte[] msg_10 = new byte[] {
+            0x94, 0xd2, 0x00, 0x66, 0x08, 0x91, 0x2a, 0xdf, 0x35, 0x09
+
+        };
+
+        private long sendCount = 0;
+
         public TcpClient(string host, int port)
         {
             var endpoint = new DnsEndPoint(host, port);
             Context.System.Tcp().Tell(new Tcp.Connect(endpoint));
             msg_512 = msg_512_str.HexToBytes();
+            Context.System.Scheduler.ScheduleTellRepeatedlyCancelable(1000, 1000, Self, new TPSTimer(), Self);
         }
 
         protected override void OnReceive(object message)
@@ -89,7 +105,11 @@ namespace AkkaClient
                         break;
                     case string msg when msg.Equals("start_tps"):
                         Log.Info("Start to send tps msg");
-                        connection.Tell(Tcp.Write.Create(ByteString.FromBytes(msg_512)));
+                        for (long i = 0; i < 1024 * 2 * 1024; i++)
+                        {
+                            sendCount++;
+                            connection.Tell(Tcp.Write.Create(ByteString.FromBytes(msg_512)));
+                        }
                         break;
                     case string msg:
                         Log.Info("Start to send normal msg");
@@ -98,6 +118,10 @@ namespace AkkaClient
                     case Tcp.PeerClosed _:
                         Log.Info("Connection closed");
                         break;
+                    case TPSTimer _:
+                        Log.Info($"Send tps is {sendCount}/s");
+                        sendCount = 0;
+                        break;
                     default:
                         Unhandled(message);
                         break;
@@ -105,4 +129,5 @@ namespace AkkaClient
             };
         }
     }
+    internal class TPSTimer { }
 }
