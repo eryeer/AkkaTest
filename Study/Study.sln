@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Study", "Study\Study.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Study.Test", "Study.Test\Study.Test.csproj", "{8FC8877F-E711-4169-B77A-0AF943E84E86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaClient", "AkkaClient\AkkaClient.csproj", "{9994F206-F50E-4A87-8EEC-629576B2A3EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkkaClientMultiPort", "AkkaClientMultiPort\AkkaClientMultiPort.csproj", "{9994F206-F50E-4A87-8EEC-629576B2A3EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaServer", "AkkaServer\AkkaServer.csproj", "{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AkkaServerMultiPort", "AkkaServerMultiPort\AkkaServerMultiPort.csproj", "{BF82C6DA-E7C2-4FAA-B0DD-A0F42C75A74B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
