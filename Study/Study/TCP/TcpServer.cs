@@ -9,7 +9,7 @@ namespace Study.TCP
 {
     public class StartServer
     {
-        static void Main(string[] args)
+        static void Main01(string[] args)
         {
             var sys = ActorSystem.Create("MySystem");
             //var manager = sys.Tcp();
