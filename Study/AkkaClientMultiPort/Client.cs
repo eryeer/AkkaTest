@@ -14,9 +14,9 @@ namespace AkkaClient
             var sys = ActorSystem.Create("ClientSystem");
             //var manager = sys.Tcp();
             var client1 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8088), "tcp-client1");
-            var client2 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8089), "tcp-client2");
-            var client3 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8090), "tcp-client3");
-            var client4 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8091), "tcp-client4");
+            //var client2 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8089), "tcp-client2");
+            //var client3 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8090), "tcp-client3");
+            //var client4 = sys.ActorOf(TcpClient.Props("127.0.0.1", 8091), "tcp-client4");
             string msg = "";
             while (true)
             {
@@ -31,17 +31,17 @@ namespace AkkaClient
                 {
                     Console.WriteLine("start tps test");
                     client1.Tell("start_tps");
-                    client2.Tell("start_tps");
-                    client3.Tell("start_tps");
-                    client4.Tell("start_tps");
+                    //client2.Tell("start_tps");
+                    //client3.Tell("start_tps");
+                    //client4.Tell("start_tps");
                 }
                 else
                 {
                     Console.WriteLine("send a normal msg");
                     client1.Tell(msg);
-                    client2.Tell(msg);
-                    client3.Tell(msg);
-                    client4.Tell(msg);
+                    //client2.Tell(msg);
+                    //client3.Tell(msg);
+                    //client4.Tell(msg);
                 }
             }
         }

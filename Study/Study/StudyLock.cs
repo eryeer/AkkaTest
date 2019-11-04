@@ -6,7 +6,7 @@ namespace Study
 {
     public class StudyLock
     {
-        static void Main(string[] args)
+        static void Main01(string[] args)
         {
             Test();
 

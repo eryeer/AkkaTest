@@ -14,9 +14,9 @@ namespace AkkaServer
         {
             var sys = ActorSystem.Create("ServerSystem");
             var server1 = sys.ActorOf(TcpServer.Props(8088), "tcp-server1");
-            var server2 = sys.ActorOf(TcpServer.Props(8089), "tcp-server2");
-            var server3 = sys.ActorOf(TcpServer.Props(8090), "tcp-server3");
-            var server4 = sys.ActorOf(TcpServer.Props(8091), "tcp-server4");
+            //var server2 = sys.ActorOf(TcpServer.Props(8089), "tcp-server2");
+            //var server3 = sys.ActorOf(TcpServer.Props(8090), "tcp-server3");
+            //var server4 = sys.ActorOf(TcpServer.Props(8091), "tcp-server4");
             Console.ReadLine();
         }
     }
